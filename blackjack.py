@@ -18,7 +18,7 @@ class DeckOfCards:
         self.Numeros = ['A', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'J',
                         'Q', 'K']
         self.Naipe = ['♥', '♦', '♣', '♠']
-        self.Valores = [[1, 11], 2, 3, 4, 5, 6, 7, 8, 9, 10, 10, 10, 10]
+        self.Valores = [[1, 11], 2, 3, 4, 5, 6, 7, 8, 9, 10, 10, 10, 10]*4
         self.Deck = []
         for nai in self.Naipe:
             for num in self.Numeros:
@@ -31,9 +31,10 @@ class DeckOfCards:
         """
         Get the value of a single card
         """
-        pass
+        return self.Valores[self.Deck.index(card)]
 
 
 if __name__ == "__main__":
     myDeck = DeckOfCards()
     print(myDeck.Deck)
+    print(myDeck.value('6♦'))
