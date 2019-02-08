@@ -15,26 +15,26 @@ class DeckOfCards:
     Definition of the deck and the values of the cards used
     """
     def __init__(self):
-        self.Numeros = ['A', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'J',
+        self.numeros = ['A', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'J',
                         'Q', 'K']
-        self.Naipe = ['♥', '♦', '♣', '♠']
-        self.Valores = [[1, 11], 2, 3, 4, 5, 6, 7, 8, 9, 10, 10, 10, 10]*4
-        self.Deck = []
-        for nai in self.Naipe:
-            for num in self.Numeros:
-                self.Deck.append(num+nai)
+        self.naipe = ['♥', '♦', '♣', '♠']
+        self.valores = [[1, 11], 2, 3, 4, 5, 6, 7, 8, 9, 10, 10, 10, 10]*4
+        self.deck = []
+        for nai in self.naipe:
+            for num in self.numeros:
+                self.deck.append(num+nai)
 
     def __string__(self):
-        return self.Deck
+        return self.deck
 
     def value(self, card):
         """
         Get the value of a single card
         """
-        return self.Valores[self.Deck.index(card)]
+        return self.valores[self.deck.index(card)]
 
 
 if __name__ == "__main__":
-    myDeck = DeckOfCards()
-    print(myDeck.Deck)
-    print(myDeck.value('6♦'))
+    MY_DECK = DeckOfCards()
+    print(MY_DECK.deck)
+    print(MY_DECK.value('6♦'))
