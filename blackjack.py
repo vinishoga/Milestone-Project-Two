@@ -17,7 +17,7 @@ class DeckOfCards:
     def __init__(self):
         self.Numeros = ['A', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'J',
                         'Q', 'K']
-        self.Naipe = [' Copas', ' Ouros', ' Paus', ' Espadas']
+        self.Naipe = ['♥', '♦', '♣', '♠']
         self.Valores = [[1, 11], 2, 3, 4, 5, 6, 7, 8, 9, 10, 10, 10, 10]
         self.Deck = []
         for nai in self.Naipe:
