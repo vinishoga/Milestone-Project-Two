@@ -14,6 +14,8 @@ class DeckOfCards:
     """
     Definition of the deck and the values of the cards used
     """
+    max_cards = 52   
+    
     def __init__(self):
         self.numeros = ['A', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'J',
                         'Q', 'K']
@@ -32,25 +34,60 @@ class DeckOfCards:
         Get the value of a single card
         """
         return self.valores[self.deck.index(card)]
-
+    
+    def deal_cards(self):
+        """
+        randomly selects a deck card
+        """
+        aux = random.randint(0, self.max_cards)
+        self.max_cards -= 1
+        card = self.deck[aux]
+        self.deck.pop(aux)
+        print(f" A carta recebida foi: {card}")
+        return card
 
 class Hand(DeckOfCards):
     """
     Stores the hand of the player
     """
     def __init__(self):
+        DeckOfCards.__init__(self)
         self.cards = []
         self.totalValue = 0
 
     def __str__(self):
         return str(self.cards)
-
+    
+    def sum_hand(self, cards):
+        """
+        return the number of elephants playing the game
+        """   
+        self.totalValue = 0
+        have_a = False
+        num_of_a = 0
+        for card in cards:     
+            if "A" in card:
+                have_a = True
+                num_of_a += 1
+            else:
+                self.totalValue += DeckOfCards.value(self,card) 
+                
+        if have_a == True:
+            cont = 0
+            while cont < num_of_a:
+                self.totalValue += 11
+                if self.totalValue > 21:
+                    self.totalValue-= 10
+                cont += 1
+        
     def add_card(self, card):
         """
         Add a new card to the hand of the player
         """
         self.cards.append(card)
-
+        self.sum_hand(self.cards)
+        print(f" o valor da mão é: {self.totalValue}")
+    
 
 def menu():
     print('\n'*30)
