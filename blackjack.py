@@ -8,7 +8,6 @@ Last update: 02/08/2019
 
 Objective: This is a program to simulate a 1x1 (PvM) Black Jack Game
 """
-import random
 
 
 class DeckOfCards:
@@ -82,21 +81,47 @@ class Hand(DeckOfCards):
                 cont += 1
         
     def add_card(self, card):
+        """
+        Add a new card to the hand of the player
+        """
         self.cards.append(card)
         self.sum_hand(self.cards)
         print(f" o valor da mão é: {self.totalValue}")
     
 
+def menu():
+    print('\n'*30)
+    print('Welcome to the Blackjack For Idiots '
+          'developed by Jvcl and Vinishoga!')
+    print('\n\t\t   This is a PvM game in which you'
+          '\n\t\t(the idiot) play against the machine...')
+    print('\n\nObjective: The Idiot Player will draw until it hits 21 points,'
+          '\n           bust or wants to stop.')
+    print('Rules:\t   In this game you will receive initially two cards and'
+          ' then every turn \n\t   will be asked if you want to STAND (do'
+          ' not receive new cards) or HIT \n\t   (receive a new card) until'
+          ' you either stop or bust. Then the machine \n\t   will draw cards'
+          ' until it has more points than you or bust.')
+    print('\n\t   The value of the cards are as follows:')
+    print('\t      - Numbers have the value of their actual numbers...')
+    print('\t      - Figures are worth 10 points...')
+    print('\t      - And aces can be either 1 or 11, depending on the ammount '
+          'of \n\t        points you already have')
+    print('Example:')
+    print('\t1-> K♣ + 9♦ = 19')
+    print('\t2-> A♥ + 7♥ = 18')
+    print('\t3-> J♠ + A♦ = 21')
+    print('\t4-> 9♦ + 9♣ + 7♥ = 25')
+
+
 if __name__ == "__main__":
-    my_deck = DeckOfCards()
-    my_hand = Hand()
-    aux = 0
-    print(f"meu deck inical é: {my_deck}")
-    print(f"minha Mão inical é: {my_hand}")
-    while aux< 10:
-        
-        my_hand.add_card(my_deck.deal_cards())
-        aux += 1
-        
-    print(f"meu deck final é: {my_deck}")
-    print(f"minha Mão final é: {my_hand}")
+    replay = True
+    while(replay):
+        menu()
+        print('Do you want to play again? Yes (Y) or No (N)')
+        answer = input()
+        if answer.lower() == 'yes' or 'y' or '1' or 'True':
+            replay = True
+        else:
+            replay = False
+            print('\n\nEnd of Game! Thanks for playing, Idiot!')
