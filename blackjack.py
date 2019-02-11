@@ -8,6 +8,7 @@ Last update: 02/08/2019
 
 Objective: This is a program to simulate a 1x1 (PvM) Black Jack Game
 """
+import random
 
 
 class DeckOfCards:
@@ -24,8 +25,8 @@ class DeckOfCards:
             for num in self.numeros:
                 self.deck.append(num+nai)
 
-    def __string__(self):
-        return self.deck
+    def __str__(self):
+        return str(self.deck)
 
     def value(self, card):
         """
@@ -34,7 +35,35 @@ class DeckOfCards:
         return self.valores[self.deck.index(card)]
 
 
+class Hand(DeckOfCards):
+    """
+    Stores the hand of the player
+    """
+    def __init__(self):
+        self.cards = []
+        self.totalValue = 0
+
+    def __str__(self):
+        return str(self.cards)
+
+    def add_card(self, card):
+        self.cards.append(card)
+
+
 if __name__ == "__main__":
     MY_DECK = DeckOfCards()
-    print(MY_DECK.deck)
-    print(MY_DECK.value('6♦'))
+    MY_HAND = Hand()
+    print(MY_DECK)
+    print(MY_DECK.valores)
+    a = random.randint(0, 52)
+    print(f'{MY_DECK.deck[a]} and  {MY_DECK.value(MY_DECK.deck[a])}')
+    print(MY_DECK.value('A♦'))
+    print(MY_HAND)
+    MY_HAND.add_card(MY_DECK.deck[a])
+    print(MY_HAND)
+    a = random.randint(0, 52)
+    MY_HAND.add_card(MY_DECK.deck[a])
+    print(MY_HAND)
+    a = random.randint(0, 52)
+    MY_HAND.add_card(MY_DECK.deck[a])
+    print(MY_HAND)
