@@ -8,7 +8,6 @@ Last update: 02/08/2019
 
 Objective: This is a program to simulate a 1x1 (PvM) Black Jack Game
 """
-import random
 
 
 class DeckOfCards:
@@ -47,23 +46,45 @@ class Hand(DeckOfCards):
         return str(self.cards)
 
     def add_card(self, card):
+        """
+        Add a new card to the hand of the player
+        """
         self.cards.append(card)
 
 
+def menu():
+    print('\n'*30)
+    print('Welcome to the Blackjack For Idiots '
+          'developed by Jvcl and Vinishoga!')
+    print('\n\t\t   This is a PvM game in which you'
+          '\n\t\t(the idiot) play against the machine...')
+    print('\n\nObjective: The Idiot Player will draw until it hits 21 points,'
+          '\n           bust or wants to stop.')
+    print('Rules:\t   In this game you will receive initially two cards and'
+          ' then every turn \n\t   will be asked if you want to STAND (do'
+          ' not receive new cards) or HIT \n\t   (receive a new card) until'
+          ' you either stop or bust. Then the machine \n\t   will draw cards'
+          ' until it has more points than you or bust.')
+    print('\n\t   The value of the cards are as follows:')
+    print('\t      - Numbers have the value of their actual numbers...')
+    print('\t      - Figures are worth 10 points...')
+    print('\t      - And aces can be either 1 or 11, depending on the ammount '
+          'of \n\t        points you already have')
+    print('Example:')
+    print('\t1-> K♣ + 9♦ = 19')
+    print('\t2-> A♥ + 7♥ = 18')
+    print('\t3-> J♠ + A♦ = 21')
+    print('\t4-> 9♦ + 9♣ + 7♥ = 25')
+
+
 if __name__ == "__main__":
-    MY_DECK = DeckOfCards()
-    MY_HAND = Hand()
-    print(MY_DECK)
-    print(MY_DECK.valores)
-    a = random.randint(0, 52)
-    print(f'{MY_DECK.deck[a]} and  {MY_DECK.value(MY_DECK.deck[a])}')
-    print(MY_DECK.value('A♦'))
-    print(MY_HAND)
-    MY_HAND.add_card(MY_DECK.deck[a])
-    print(MY_HAND)
-    a = random.randint(0, 52)
-    MY_HAND.add_card(MY_DECK.deck[a])
-    print(MY_HAND)
-    a = random.randint(0, 52)
-    MY_HAND.add_card(MY_DECK.deck[a])
-    print(MY_HAND)
+    replay = True
+    while(replay):
+        menu()
+        print('Do you want to play again? Yes (Y) or No (N)')
+        answer = input()
+        if answer.lower() == 'yes' or 'y' or '1' or 'True':
+            replay = True
+        else:
+            replay = False
+            print('\n\nEnd of Game! Thanks for playing, Idiot!')
