@@ -8,19 +8,18 @@ Last update: 02/08/2019
 
 Objective: This is a program to simulate a 1x1 (PvM) Black Jack Game
 """
+import random
 
 
 class DeckOfCards:
     """
     Definition of the deck and the values of the cards used
     """
-    max_cards = 52   
-    
     def __init__(self):
         self.numeros = ['A', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'J',
                         'Q', 'K']
         self.naipe = ['♥', '♦', '♣', '♠']
-        self.valores = [[1, 11], 2, 3, 4, 5, 6, 7, 8, 9, 10, 10, 10, 10]*4
+        self.valores = [11, 2, 3, 4, 5, 6, 7, 8, 9, 10, 10, 10, 10]*4
         self.deck = []
         for nai in self.naipe:
             for num in self.numeros:
@@ -34,17 +33,17 @@ class DeckOfCards:
         Get the value of a single card
         """
         return self.valores[self.deck.index(card)]
-    
+
     def deal_cards(self):
         """
         randomly selects a deck card
         """
-        aux = random.randint(0, self.max_cards)
-        self.max_cards -= 1
+        aux = random.randint(0, len(self.deck))
         card = self.deck[aux]
         self.deck.pop(aux)
-        print(f" A carta recebida foi: {card}")
+        print(f"Received: {card}")
         return card
+
 
 class Hand(DeckOfCards):
     """
@@ -55,39 +54,35 @@ class Hand(DeckOfCards):
         self.cards = []
         self.totalValue = 0
 
-    def __str__(self):
-        return str(self.cards)
-    
+    def __str__(self, player):
+        aux = f"{player} current cards are "
+        for card in self.cards:
+            aux += f"{card}"
+            if card is not self.cards[-1]:
+                aux += " and "
+            else:
+                aux += ".\n"
+        return aux
+
     def sum_hand(self, cards):
         """
         return the number of elephants playing the game
-        """   
+        """
         self.totalValue = 0
-        have_a = False
-        num_of_a = 0
-        for card in cards:     
-            if "A" in card:
-                have_a = True
-                num_of_a += 1
-            else:
-                self.totalValue += DeckOfCards.value(self,card) 
-                
-        if have_a == True:
-            cont = 0
-            while cont < num_of_a:
-                self.totalValue += 11
-                if self.totalValue > 21:
-                    self.totalValue-= 10
-                cont += 1
-        
+        for card in cards:
+            self.totalValue += DeckOfCards.value(self, card)
+
+        for card in cards:
+            if self.totalValue > 21 and 'A' in card:
+                self.totalValue -= 10
+
     def add_card(self, card):
         """
         Add a new card to the hand of the player
         """
         self.cards.append(card)
         self.sum_hand(self.cards)
-        print(f" o valor da mão é: {self.totalValue}")
-    
+
 
 def menu():
     print('\n'*30)
@@ -111,17 +106,33 @@ def menu():
     print('\t1-> K♣ + 9♦ = 19')
     print('\t2-> A♥ + 7♥ = 18')
     print('\t3-> J♠ + A♦ = 21')
-    print('\t4-> 9♦ + 9♣ + 7♥ = 25')
+    print('\t4-> 9♦ + 9♣ + 7♥ = 25\n\n')
+
+
+def restart():
+    print('\nDo you want to play again? Yes (Y) or No (N)')
+    answer = input()
+    if answer.lower() == ('yes' or 'y' or '1' or 'True'):
+        return True
+    else:
+        print('\nEnd of Game! Thanks for playing, Idiot!')
+        return False
 
 
 if __name__ == "__main__":
+    p = {"Machine": 0, "Player One": 1}
+    hands = []
+
+    MY_DECK = DeckOfCards()
+    for i in range(2):
+        hands.append(Hand())
+
     replay = True
-    while(replay):
+    while(replay is True):
         menu()
-        print('Do you want to play again? Yes (Y) or No (N)')
-        answer = input()
-        if answer.lower() == 'yes' or 'y' or '1' or 'True':
-            replay = True
-        else:
-            replay = False
-            print('\n\nEnd of Game! Thanks for playing, Idiot!')
+        hands[p["Machine"]].add_card(MY_DECK.deal_cards())
+        print(hands[p["Machine"]].__str__("Machine"))
+        hands[p["Player One"]].add_card(MY_DECK.deal_cards())
+        hands[p["Player One"]].add_card(MY_DECK.deal_cards())
+        print(hands[p["Player One"]].__str__("Player One"))
+        replay = restart()
