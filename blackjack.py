@@ -49,20 +49,24 @@ class Hand(DeckOfCards):
     """
     Stores the hand of the player
     """
-    def __init__(self):
+    def __init__(self, name):
         DeckOfCards.__init__(self)
+        self.name = name
         self.cards = []
         self.totalValue = 0
+        self.keepGoing = True
 
-    def __str__(self, player):
-        aux = f"{player} current cards are "
+    def __str__(self):
+        aux = f"{self.name} current cards are "
         for card in self.cards:
             aux += f"{card}"
             if card is not self.cards[-1]:
                 aux += " and "
             else:
-                aux += ".\n"
+                aux += "."
         return aux
+    
+    __repr__ = __str__
 
     def sum_hand(self, cards):
         """
@@ -75,6 +79,10 @@ class Hand(DeckOfCards):
         for card in cards:
             if self.totalValue > 21 and 'A' in card:
                 self.totalValue -= 10
+                
+        if self.totalValue > 21:
+            self.keepGoing = False
+            print(f"{self.name} busted!")
 
     def add_card(self, card):
         """
@@ -106,13 +114,64 @@ def menu():
     print('\t1-> K♣ + 9♦ = 19')
     print('\t2-> A♥ + 7♥ = 18')
     print('\t3-> J♠ + A♦ = 21')
-    print('\t4-> 9♦ + 9♣ + 7♥ = 25\n\n')
+    print('\t4-> 9♦ + 9♣ + 7♥ = 25')
+
+
+def initial_phase():
+    """
+    The initial phase is different than the rest of the phases, since it has a
+    different drawing
+    """
+    for player in p:
+        print("\n"+player+" turn:")
+        if player == "Machine":
+            hands[p[player]].add_card(MY_DECK.deal_cards())
+        else:
+            hands[p[player]].add_card(MY_DECK.deal_cards())
+            hands[p[player]].add_card(MY_DECK.deal_cards())
+            print(hands[p[player]])
+
+
+def game_phase():
+    """
+    Normal gaming turn
+    """
+    print("\n\nTurn {}:".format(len(hands[p["Player 1"]].cards)-1))
+    for player in p:
+        if not player == "Machine":
+            if hands[p[player]].keepGoing:
+                while(1):
+                    ans = input(f"{player}, do you want to draw "
+                                 "more cards? (Y/N) ").capitalize()
+                    if ans in ("Y","YES"):
+                        hands[p[player]].add_card(MY_DECK.deal_cards())
+                        break
+                    elif ans in ("N","NO"):
+                        hands[p[player]].keepGoing = False
+                        break
+                    else:
+                        print("Not a valid answer. "
+                              "Please type again (Y/N)... ")
+            elif not hands[p[player]].keepGoing:
+                print(f"{player} doesn't want to draw anymore...")
+                
+    print("\nCurrent player cards are: ")
+    for player in p:
+        if player is not "Machine":
+            print(hands[p[player]])
+
+
+def end_phase():
+    """
+    Last turn for the dealer (Machine) to win
+    """
+    pass
 
 
 def restart():
     print('\nDo you want to play again? Yes (Y) or No (N)')
     answer = input()
-    if answer.lower() == ('yes' or 'y' or '1' or 'True'):
+    if answer.lower() in ('yes','y','1','True'):
         return True
     else:
         print('\nEnd of Game! Thanks for playing, Idiot!')
@@ -120,19 +179,26 @@ def restart():
 
 
 if __name__ == "__main__":
-    p = {"Machine": 0, "Player One": 1}
-    hands = []
+            
+    while(1):
+        num_p = int(input("How many players are going to play Blackjack? "))
+        if num_p>=1:
+            break
+        else:
+            print("Not possible to have less then one player... Try again...")
+    p = {"Machine" : 0}
+    MY_DECK = DeckOfCards()    
+    hands = [Hand(p["Machine"])]
+    for index in range(1,num_p+1):
+        p[f"Player {index}"] = index
+        hands.append(Hand(f"Player {index}"))
 
-    MY_DECK = DeckOfCards()
-    for i in range(2):
-        hands.append(Hand())
-
-    replay = True
-    while(replay is True):
+    while(1):
         menu()
-        hands[p["Machine"]].add_card(MY_DECK.deal_cards())
-        print(hands[p["Machine"]].__str__("Machine"))
-        hands[p["Player One"]].add_card(MY_DECK.deal_cards())
-        hands[p["Player One"]].add_card(MY_DECK.deal_cards())
-        print(hands[p["Player One"]].__str__("Player One"))
-        replay = restart()
+        initial_phase()
+        while(any([h.keepGoing for h in hands[1:]])):
+            game_phase()
+        end_phase()
+        if restart() is True:
+            break
+
